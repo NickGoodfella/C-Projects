@@ -1,88 +1,85 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct employee
-{
-	int idNum;
-	char* firstName;
-	char* lastName;
-	short age;
-	int salary;
-  char* jobTitle;
+struct employee {
+  int idNum;
+  char *firstName;
+  char *lastName;
+  short age;
+  int salary;
+  char *jobTitle;
 };
 
-void fillOutEmployeeInfo(struct employee* employee, int* numEmployees)
-{
-	static int idNum = 1;
+void fillOutEmployeeInfo(struct employee *employee, int *numEmployees) {
+  static int idNum = 1;
 
-	for(int i = 0; i < *numEmployees; i++)
-	{
-		printf("Enter The Employee's First Name, Last Name, Age, Salary, and Job Title\n");
-		scanf(" %20s", employee[i].firstName); 
-		scanf(" %20s", employee[i].lastName);
-		scanf(" %hd", &employee[i].age);
-		scanf(" %d", &employee[i].salary);
+  for (int i = 0; i < *numEmployees; i++) {
+    printf("Enter The Employee's First Name, Last Name, Age, Salary, and Job "
+           "Title\n");
+    scanf(" %20s", employee[i].firstName);
+    scanf(" %20s", employee[i].lastName);
+    scanf(" %hd", &employee[i].age);
+    scanf(" %d", &employee[i].salary);
     scanf(" %64[^\n]", employee[i].jobTitle);
-		employee[i].idNum = idNum;
-		idNum++;
-	}
+    employee[i].idNum = idNum;
+    idNum++;
+  }
 };
 
-void setNumberOfEmployees(int* numOfEmployees)
-{
+void setNumberOfEmployees(int *numOfEmployees) {
   printf("How Many Employees Are Employed At Your Company?\n");
   scanf("%d", numOfEmployees);
 }
 
-int main()
-{
-	// Ask user how many people are employeed at their company
+int main() {
+  // Ask user how many people are employeed at their company
   int numOfEmployees;
   setNumberOfEmployees(&numOfEmployees);
 
   // allocate memory on the heap for number of employees we will have
-	struct employee * emp = malloc(sizeof(struct employee) * numOfEmployees);
+  struct employee *emp = malloc(sizeof(struct employee) * numOfEmployees);
 
   // make sure malloc didn't fail
-	if(emp == NULL )
-	{
-		printf("The allocator failed\n");
-		return -1;
-	}
+  if (emp == NULL) {
+    printf("The allocator failed\n");
+    return -1;
+  }
   const int SIZE_OF_NAMES = 21;
   const int SIZE_OF_JOB_TITLE = 65;
-	// lets allocate memory on the heap for our employee first and lastname
-	for(int i = 0; i < numOfEmployees; i++)
-	{
-		emp[i].firstName = malloc(SIZE_OF_NAMES);
-		emp[i].lastName = malloc(SIZE_OF_NAMES);
+  // lets allocate memory on the heap for our employee first and lastname
+  for (int i = 0; i < numOfEmployees; i++) {
+    emp[i].firstName = malloc(SIZE_OF_NAMES);
+    emp[i].lastName = malloc(SIZE_OF_NAMES);
     emp[i].jobTitle = malloc(SIZE_OF_JOB_TITLE);
 
-		if(emp[i].firstName == NULL || emp[i].lastName == NULL || emp[i].jobTitle == NULL)
-		{
-			printf("The allocator failed\n");
+    if (emp[i].firstName == NULL || emp[i].lastName == NULL ||
+        emp[i].jobTitle == NULL) {
+      printf("The allocator failed\n");
       return -1;
-		}
-	}
-	
+    }
+  }
+
   // send employee struct pointer to function to initialize
-	fillOutEmployeeInfo(emp, &numOfEmployees);
-  
-  // print out all the employees inputted then free the memory for our char*'s in the struct
-	for(int i = 0; i < numOfEmployees; i++)
-	{
-		printf("\nEmployee ID = %d\n Employee First Name = %s\n Employee Last Name = %s\n Employee Age = %hd\n Employee Salary = %d\n Employee Job Title = %s\n",
-    emp[i].idNum, emp[i].firstName, emp[i].lastName, emp[i].age, emp[i].salary, emp[i].jobTitle);
-		
+  fillOutEmployeeInfo(emp, &numOfEmployees);
+
+  // print out all the employees inputted then free the memory for our char*'s
+  // in the struct
+  for (int i = 0; i < numOfEmployees; i++) {
+    printf("\nEmployee ID = %d\n Employee First Name = %s\n Employee Last Name "
+           "= %s\n Employee Age = %hd\n Employee Salary = %d\n Employee Job "
+           "Title = %s\n",
+           emp[i].idNum, emp[i].firstName, emp[i].lastName, emp[i].age,
+           emp[i].salary, emp[i].jobTitle);
+
     free(emp[i].firstName);
-		free(emp[i].lastName);
+    free(emp[i].lastName);
     free(emp[i].jobTitle);
-		emp[i].firstName = NULL;
-		emp[i].lastName = NULL;
+    emp[i].firstName = NULL;
+    emp[i].lastName = NULL;
     emp[i].jobTitle = NULL;
-	}
+  }
   // free memory for our emp struct
-	free(emp);
-	emp = NULL;
-	return 0;
+  free(emp);
+  emp = NULL;
+  return 0;
 }
